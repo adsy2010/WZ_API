@@ -8,4 +8,4 @@
 require_once 'Tables.php';
 
 $api = new Tables();
-$api->PullData();
+echo $api->PullData();
