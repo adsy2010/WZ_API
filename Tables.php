@@ -18,12 +18,12 @@ class Tables {
     public function PullData($table = "cars")
     {
         try{
-            $query = "SELECT * FROM ?";
+            $query = "SELECT * FROM `$table`";
 
             if(!$stmt = $this->db->prepare($query))
-                throw new Exception("Failed to bind data");
+                throw new Exception("Failed to bind data" . $this->db->error);
 
-            $stmt->bind_param("s", $table);
+
 
             //borrowed and modified from stackoverflow to return statment
             //http://stackoverflow.com/questions/4466697/attach-data-in-array-in-a-php-mysqli-prepared-statement
@@ -47,7 +47,14 @@ class Tables {
             // bind results to associative array
             call_user_func_array(array($stmt, "bind_result"), $bind_array);
             // continually fetch all records into associative array and add it to final $all_rows array
-            while($stmt->fetch()) $all_rows[] = $current_row;
+            while($stmt->fetch()) {
+                foreach ($bind_array as $k => $v)
+                {
+                    $tmp[$k] = $v;
+                }
+                $all_rows[] = $tmp;
+            }
+            $stmt->close();
             return json_encode($all_rows);
         }
         catch(Exception $e)
