@@ -12,10 +12,10 @@ class Tables {
 
     public function __construct()
     {
-        $this->db = new mysqli("localhost", "wz_test", "C8#8jm6l", "wz_api");
+        $this->db = new mysqli("localhost", "user", "pass", "wz_api");
     }
 
-    public function PullData($table = "cars")
+    public function PullData($table)
     {
         try{
             $query = "SELECT * FROM `$table`";
